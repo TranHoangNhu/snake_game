@@ -1,3 +1,8 @@
+import playBackgroundAudio from "./sound_effect.js";
+
+// Gọi hàm playBackgroundAudio() để phát âm thanh
+playBackgroundAudio();
+
 const snakeHeadImg = document.getElementById("snakeHead");
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
