@@ -6,7 +6,7 @@ export default function playBackgroundAudio() {
 
   const backgroundAudio = document.createElement("audio");
   backgroundAudio.id = "background-audio";
-  backgroundAudio.src = "./audio/sound_playing.mp3";
+  backgroundAudio.src = "./audio/sound_playing_lv1.mp3";
   backgroundAudio.loop = true;
   // backgroundAudio.autoplay = true;
   document.body.appendChild(backgroundAudio);
