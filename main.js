@@ -2,6 +2,8 @@ import playBackgroundAudio from "./sound_effect.js";
 
 const audioEffects = playBackgroundAudio();
 
+const modalGameOver = document.querySelector(".overplayModal");
+const modalVictory = document.querySelector(".victoryModal");
 const snakeHeadImg = document.getElementById("snakeHead");
 const foodIcon = document.getElementById("foodIcon");
 const canvas = document.getElementById("gameCanvas");
@@ -178,16 +180,6 @@ function gameLoop() {
 }
 
 document.addEventListener("keydown", function (event) {
-  if (gameOver) {
-    if (event.ctrlKey && event.code === "Space") {
-      restartGame();
-      //   document.querySelector(".btnRestart").Click();
-    }
-    return;
-  }
-  if (!event.ctrlKey && event.code === "Space") {
-    pauseGame();
-  }
   // Xử lý phím tắt bình thường khi trò chơi đang diễn ra
   if (event.key === "ArrowRight" && direction !== "left") direction = "right";
   else if (event.key === "ArrowLeft" && direction !== "right")
@@ -218,7 +210,9 @@ function restartGame() {
   clearInterval(gameInterval); // Xóa interval cũ
   gameInterval = setInterval(gameLoop, snakeSpeed); // Khởi tạo interval mới
 }
-document.querySelector(".btnRestart").addEventListener("click", restartGame);
+document.querySelectorAll(".btnRestart").forEach((key) => {
+  key.addEventListener("click", restartGame);
+});
 
 //event pause game
 function pauseGame() {
@@ -252,15 +246,31 @@ document.querySelector("#startGame").addEventListener("click", startGame);
 
 function gameOverFunc() {
   audioEffects.backgroundAudio.pause();
+  audioEffects.backgroundAudio.currentTime = 0;
   audioEffects.gameOverSound.play();
   gameOver = true; // Đặt trạng thái kết thúc trò chơi thành true
   gameRestarted = false; // Đặt trạng thái khởi động lại trò chơi thành false
-  alert("Game Over");
+  modalGameOver.classList.add("active");
 }
+document
+  .getElementById("closeGameOverModal")
+  .addEventListener("click", function () {
+    audioEffects.gameOverSound.pause();
+    audioEffects.gameOverSound.currentTime = 0;
+    modalGameOver.classList.remove("active");
+  });
 
 function gameVictory() {
   audioEffects.backgroundAudio.pause();
+  audioEffects.backgroundAudio.currentTime = 0;
   audioEffects.victorySound.play();
-  alert("bạn đã thắng !!!");
-  restartGame();
+  modalVictory.classList.add("active");
+  pauseGame();
 }
+document
+  .getElementById("closeVictoryModal")
+  .addEventListener("click", function () {
+    audioEffects.victorySound.pause();
+    audioEffects.victorySound.currentTime = 0;
+    modalVictory.classList.remove("active");
+  });

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import "animations.css";
 @import "btn_lib.css";
+@import "modal.css";
 
 :root {
   --gradient-0: linear-gradient(
@@ -74,13 +75,26 @@ body {
   margin-bottom: 50px;
   text-align: center;
 }
-.gameStart p {
-  font-size: 18px;
-  font-style: italic;
-  margin-top: 50px;
-  color: #a3a3a3;
-  font-family: "JetBrains Mono", monospace;
+
+/* text-typing */
+.text-typing {
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+  width: max-content;
 }
+.text-typing p {
+  font-family: "JetBrains Mono", monospace;
+  font-style: italic;
+  color: #96ee1c;
+  font-weight: 700;
+  font-size: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 5s steps(30) infinite, blink 1s infinite;
+  box-shadow: 0 5px 15px #96ee1c8d;
+}
+
 #gameCanvas {
   background-color: #fff;
   border-radius: 10px;
