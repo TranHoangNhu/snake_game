@@ -106,7 +106,7 @@
   border-radius: 10px;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: manipulation;
+  /* touch-action: manipulation; */
   font-family: "JetBrains Mono", monospace;
   font-size: 40px;
 }
@@ -161,4 +161,15 @@
   left: 0;
   top: 0;
   border-radius: 10px;
+}
+
+.btnStart:hover.btnStart:before {
+  transition: 0.3s;
+  filter: blur(20px);
+  -webkit-filter: blur(20px);
+}
+
+.btnStart:hover {
+  transition: 0.3s;
+  font-weight: bold;
 }
