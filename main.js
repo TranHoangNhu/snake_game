@@ -1,9 +1,9 @@
 import playBackgroundAudio from "./sound_effect.js";
 
-// Gọi hàm playBackgroundAudio() để phát âm thanh
-playBackgroundAudio();
+const audioEffects = playBackgroundAudio();
 
 const snakeHeadImg = document.getElementById("snakeHead");
+const foodIcon = document.getElementById("foodIcon");
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 
@@ -37,7 +37,7 @@ function drawSnake() {
         gridSize
       );
     } else {
-      context.fillStyle = "green";
+      context.fillStyle = "rgba(113,181,69,0.8)";
       context.fillRect(
         segment.x * gridSize,
         segment.y * gridSize,
@@ -49,15 +49,26 @@ function drawSnake() {
 }
 
 function drawFood() {
-  context.fillStyle = "red";
+  context.fillStyle = "rgba(0,0,0,0)";
   context.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
 }
 
-function updateScoreAndLevel() {
+function updateScore() {
+  audioEffects.scoredSound.currentTime = 0;
   const scoreElement = document.getElementById("score");
-  const levelsElement = document.getElementById("levels");
   scoreElement.textContent = `Score: ${score}`;
+  if (score > 0 && score < 250) {
+    // Đặt thời gian phát về 0 và phát âm thanh
+    audioEffects.scoredSound.play();
+  }
+}
+
+function updateLevel() {
+  const levelsElement = document.getElementById("levels");
   levelsElement.textContent = `Levels: ${level}`;
+  if (level === 2) {
+    audioEffects.levelUpSound.play();
+  }
 }
 
 function moveSnake() {
@@ -91,11 +102,13 @@ function moveSnake() {
   if (headX === food.x && headY === food.y) {
     // Snake ate the food
     score += 10; // Tăng điểm số khi ăn thức ăn
-    updateScoreAndLevel(); // Cập nhật điểm số trên màn hình
+    updateScore();
+    // Cập nhật điểm số trên màn hình
     if (score % 50 === 0) {
       // Nếu điểm số chia hết cho 100, tăng cấp độ và tốc độ
       level++;
-      updateScoreAndLevel();
+      updateScore();
+      updateLevel();
       snakeSpeed -= 35;
       console.log(`tốc độ hiện tại: ${snakeSpeed}`);
       clearInterval(gameInterval);
@@ -120,8 +133,10 @@ function generateFood() {
   } while (
     snake.some((segment) => segment.x === newFood.x && segment.y === newFood.y)
   );
-
   food = newFood;
+  foodIcon.style.left = newFood.x * gridSize + "px";
+  foodIcon.style.top = newFood.y * gridSize + "px";
+  foodIcon.style.display = "block";
 }
 
 function checkCollision() {
@@ -135,18 +150,14 @@ function checkCollision() {
   ) {
     clearInterval(gameInterval);
     if (!gameOver) {
-      alert("Game Over");
-      gameOver = true; // Đặt trạng thái kết thúc trò chơi thành true
-      gameRestarted = false; // Đặt trạng thái khởi động lại trò chơi thành false
+      gameOverFunc();
     }
   }
   for (let i = 1; i < snake.length; i++) {
     if (head.x === snake[i].x && head.y === snake[i].y) {
       clearInterval(gameInterval);
       if (!gameOver) {
-        alert("Game Over");
-        gameOver = true; // Đặt trạng thái kết thúc trò chơi thành true
-        gameRestarted = false; // Đặt trạng thái khởi động lại trò chơi thành false
+        gameOverFunc();
       }
       break;
     }
@@ -160,8 +171,7 @@ function gameLoop() {
   drawFood();
   drawSnake();
   if (score === 250) {
-    alert("bạn đã thắng !!!");
-    restartGame();
+    gameVictory();
   }
 }
 
@@ -184,7 +194,9 @@ document.addEventListener("keydown", function (event) {
   else if (event.key === "ArrowDown" && direction !== "up") direction = "down";
 });
 
+//event restartgame
 function restartGame() {
+  audioEffects.backgroundAudio.play();
   // Đặt lại tất cả trạng thái cần thiết để khởi động lại trò chơi
   snake = [
     { x: 10, y: 10 },
@@ -199,26 +211,54 @@ function restartGame() {
   snakeSpeed = initialSnakeSpeed; // Đặt lại tốc độ ban đầu
   score = 0;
   level = 1; // Đặt lại điểm số thành 0
-  updateScoreAndLevel(); // Cập nhật điểm số trên màn hình
+  updateScore();
+  updateLevel();
   clearInterval(gameInterval); // Xóa interval cũ
   gameInterval = setInterval(gameLoop, snakeSpeed); // Khởi tạo interval mới
 }
+document.querySelector(".btnRestart").addEventListener("click", restartGame);
 
+//event pause game
 function pauseGame() {
   const btnPause = document.querySelector(".btnPause");
   if (!isPaused) {
     clearInterval(gameInterval); // Dừng interval nếu đang chạy
     isPaused = true;
     btnPause.innerHTML = "CONTINUE GAME";
+    audioEffects.backgroundAudio.pause();
   } else {
     gameInterval = setInterval(gameLoop, snakeSpeed); // Tiếp tục interval nếu đã tắt
     isPaused = false;
     btnPause.innerHTML = "PAUSE GAME";
+    audioEffects.backgroundAudio.play();
   }
 }
+document.querySelector(".btnPause").addEventListener("click", pauseGame);
 
-updateScoreAndLevel();
+// event btn startGame
+function startGame() {
+  updateScore();
+  updateLevel();
+  generateFood();
+  document.querySelector(".gameStart").style.display = "none";
+  document.querySelector(".canvas-container").style.display = "block";
+  document.querySelector(".toolBar").style.display = "flex";
+  audioEffects.onSoundLoop.click();
+  gameInterval = setInterval(gameLoop, snakeSpeed);
+}
+document.querySelector("#startGame").addEventListener("click", startGame);
 
-generateFood();
+function gameOverFunc() {
+  audioEffects.backgroundAudio.pause();
+  audioEffects.gameOverSound.play();
+  gameOver = true; // Đặt trạng thái kết thúc trò chơi thành true
+  gameRestarted = false; // Đặt trạng thái khởi động lại trò chơi thành false
+  alert("Game Over");
+}
 
-gameInterval = setInterval(gameLoop, snakeSpeed);
+function gameVictory() {
+  audioEffects.backgroundAudio.pause();
+  audioEffects.victorySound.play();
+  alert("bạn đã thắng !!!");
+  restartGame();
+}

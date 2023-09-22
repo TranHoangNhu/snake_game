@@ -12,18 +12,25 @@
 </head>
 
 <body>
-    <div class="canvas-container">
+    <div class="gameStart">
+        <div style="margin-bottom: 30px;">
+            <img src="https://www.coolmathgames.com/sites/default/files/Snake_OG-logo.jpg" alt="logo" width="300"
+                style="border: 2px solid #eeff00; border-radius: 15px;">
+        </div>
+        <button id="startGame" class="btnStart">start game</button>
+        <p>developed by team #laptrinhdelamgi</p>
+    </div>
+    <div class="canvas-container" style="display: none;">
         <canvas id="gameCanvas" width="1000" height="600"></canvas>
         <img id="snakeHead" src="./images/head_snake.png" style="display: none;">
+        <img id="foodIcon" src="./images/food_icon.png" style="display: none;">
     </div>
-    <div class="toolBar">
+    <div class="toolBar" style="display: none;">
         <div id="score"></div>
         <div id="levels"></div>
-        <button class="btnRestart" onclick="restartGame()">Restart Game</button>
-        <button class="btnPause" onclick="pauseGame()">Pause Game</button>
+        <button class="btnRestart">Restart Game</button>
+        <button class="btnPause">Pause Game</button>
     </div>
-     <!-- audio background game -->
-     <audio id="background-audio" src="./audio/sound_playing.mp3" loop autoplay></audio>
     <script type="module" src="./main.js"></script>
 </body>
 

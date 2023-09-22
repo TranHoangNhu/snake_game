@@ -1,6 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import "animations.css";
 @import "btn_lib.css";
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 :root {
   --gradient-0: linear-gradient(
@@ -68,6 +68,19 @@ body {
   transition: 0.5s;
   animation: rgbBackground 20s linear infinite;
 }
+.gameStart {
+  width: 100vw;
+  height: auto;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.gameStart p {
+  font-size: 18px;
+  font-style: italic;
+  margin-top: 50px;
+  color: #a3a3a3;
+  font-family: "JetBrains Mono", monospace;
+}
 #gameCanvas {
   background-color: #fff;
   border-radius: 10px;
@@ -102,4 +115,11 @@ body {
   height: 30px;
   z-index: 100000;
   /* Các thuộc tính khác tùy chỉnh vị trí và kiểu hiển thị của hình ảnh */
+}
+/* custom food icon */
+#foodIcon {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  z-index: 100000;
 }
