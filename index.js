@@ -68,11 +68,8 @@ function updateScore() {
 function updateLevel() {
   const levelsElement = document.getElementById("levels");
   levelsElement.textContent = `Levels: ${level}`;
-  if (level > 1) {
-    // audioEffects.levelUpSound.play();
-    audioEffects.backgroundAudio.src = `./audio/sound_playing_lv${level}.mp3`;
-    audioEffects.onSoundLoop.click();
-  }
+  audioEffects.backgroundAudio.src = `./audio/sound_playing_lv${level}.mp3`;
+  audioEffects.onSoundLoop.click();
 }
 
 function moveSnake() {
